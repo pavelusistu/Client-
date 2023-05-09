@@ -2,6 +2,16 @@
   text-align: center;
 }
 
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrap {
+  flex: 1;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -28,11 +38,74 @@
   color: #61dafb;
 }
 
+#banner {
+  display: block;
+  position: fixed;
+  text-align: center;
+  margin-left: 15px;
+  background-color: crimson;
+  opacity: 0.8;
+  color: rgb(0, 0, 0);
+  left: 10px;
+  width: 97%;
+  border: 2px solid black;
+  animation: cookie 3s;
+  animation-fill-mode: forwards;
+  transform-origin: bottom;
+}
+
+.linkuri {
+  text-decoration: none;
+  color: black;
+}
+
+.linii-despartitoare {
+  width: 20px;
+}
+
+#ok-cookies {
+  border: black;
+  border-color: black;
+  border-radius: 15%;
+}
+
+@media screen and (max-width: 1200px) {
+  #banner {
+    animation: cookie 0s;
+    bottom: 20px;
+  }
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes cookie {
+  0% {
+    opacity: 0;
+    background-color: crimson;
+    transform: scale(1, 0);
+    bottom: -30px;
+  }
+
+  50% {
+    opacity: 0.5;
+    background-color: crimson;
+    color: darkred;
+    transform: scale(1, 1);
+    bottom: 20px;
+  }
+
+  100% {
+    opacity: 0.8;
+    background-color: crimson;
+    color: darkred;
+    transform: scale(1, 1);
+    bottom: 0px;
   }
 }

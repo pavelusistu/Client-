@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "image": "./imagini/rtx4090.jpeg",
+    "title": "Placa video"
+  },
+  {
+    "id": 2,
+    "image": "./imagini/placaBazaAsus.jpeg",
+    "title": "Placa de baza"
+  },
+  {
+    "id": 3,
+    "image": "./imagini/carcasaAsus.jpeg",
+    "title": "Carcasa"
+  }
+]
