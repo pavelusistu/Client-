@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   AppBar,
   Toolbar,
@@ -9,6 +9,10 @@ import {
   TextField,
   Grid,
   Item,
+  Box,
+  Menu,
+  MenuItem,
+  Link
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
@@ -24,6 +28,26 @@ const Header = () => {
       backgroundColor: "white",
     },
   });
+
+  const pages = [{id: 'placa_video', denumire: "Placi video"},
+                {id: 'procesor', denumire: "Procesoare"}, 
+                {id: 'carcasa', denumire: "Carcase"},
+                {id: 'RAM', denumire: "Memorii RAM"} ,
+                {id: 'placa_baza', denumire: "Placi de baza"},
+                {id: 'cooler', denumire: "Coolere"},
+                {id: 'memorie', denumire: "Memorii"}];
+
+  const [anchorElNav, setAnchorElNav] = useState(
+    null
+  );
+
+  const handleOpenNavMenu = (e) => {
+    setAnchorElNav(e.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
 
   return (
     <React.Fragment>
@@ -46,6 +70,8 @@ const Header = () => {
                 variant="standard"
               ></TextField>
 
+              <Stack direction="row">
+
               <Button color="inherit">
                 <FavoriteBorderIcon />
                 Favorite
@@ -67,6 +93,7 @@ const Header = () => {
                   <Typography>{localStorage.getItem("username")}</Typography>
                 </Button>
               )}
+              </Stack>
             </Stack>
           </Grid>
           <Grid item xs={1}></Grid>
@@ -79,10 +106,47 @@ const Header = () => {
             <Grid item xs={1}></Grid>
             <Grid item xs={10}>
               <Stack direction="row" spacing={2}>
-                <Button href="/Produse" color="inherit">
-                  <MenuIcon />
+                <Box>
+
+                <Button color="inherit" startIcon={<MenuIcon />} aria-haspopup="true" aria-controls="menu-appbar" onClick={handleOpenNavMenu}>
                   Produse
                 </Button>
+                  {/* <Button href="/Produse" color="inherit" underline="none">
+                  Produse
+                  </Button> */}
+
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{
+                    display: { xs: "none", md: "block", },
+                    
+                  }}
+                >
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Link href="/Produse" underline="none" color="inherit">
+                      Toate
+                    </Link>
+                  </MenuItem>
+                  {pages.map((page) => (
+                    <MenuItem key={page.id} onClick={handleCloseNavMenu}>
+                      <Link href={`/Produse?categorie_produs=${page.id}`} underline="none" color="inherit">{page.denumire}</Link>
+                    </MenuItem>
+                  ))}
+                </Menu>
+
+                </Box>
 
                 <Button href="/Promotii" color="inherit">
                   Promotii

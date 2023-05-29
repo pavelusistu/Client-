@@ -5,23 +5,45 @@ import { Grid, Button } from "@mui/material";
 import "../Stilizare/Produse.css";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 
+
 const Produse = () => {
   const [backendData, setBackendData] = useState([]);
+  const [marcaOptiuni, setMarcaOptiuni] = useState([])
 
-  const getProduse = async () => {
+  const categorieCurenta = new URLSearchParams(window.location.search).get("categorie_produs")
+
+  const getProduse = async (categorie, marca) => {
     try {
-      const response = await fetch("http://localhost:5000/produse");
+      let url ="http://localhost:5000/produse"
+
+      if(categorie) {
+        url += `?categorie_produs=${categorie}`
+
+        if(marca) {
+          url += `&marca=${marca}`
+        }
+      }
+
+      const response = await fetch(url);
       const jsonData = await response.json();
 
-      setBackendData(jsonData);
+      setBackendData(jsonData.produse);
+
+      if(!categorie) {
+        if(marca) {
+          url += `?marca=${marca}`
+          setMarcaOptiuni(jsonData.marcaOptiuni)
+        }
+      }
+
     } catch (error) {
       console.error(error.message);
     }
   };
 
   useEffect(() => {
-    getProduse();
-  }, []);
+    getProduse(categorieCurenta);
+  }, [categorieCurenta]);
 
   console.log(backendData);
 
@@ -44,7 +66,10 @@ const Produse = () => {
             rowSpacing={2}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
-            {backendData.map((produse) => (
+            {typeof backendData === "undefined" || !Array.isArray(backendData) ? (
+              <p>se incarca...</p>
+            ) : (
+            backendData.map((produse) => (
               <Grid item xs={3}>
                 <div className="grid-produse">
                   <article className="produs">
@@ -104,7 +129,7 @@ const Produse = () => {
                   </article>
                 </div>
               </Grid>
-            ))}
+            )))}
           </Grid>
         </Grid>
       </Grid>
