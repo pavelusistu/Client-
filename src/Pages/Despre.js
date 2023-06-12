@@ -5,13 +5,11 @@ import Footer from "../Components/Footer";
 const Despre = () => {
   return (
     <>
-      <Header />
       <h1>
         LPA Electronics este o firma specializata in componente hardware.
         Experienta din domeniu de peste 20 de ani atesta profesionalismul cu
         care ne tratam clientii.
       </h1>
-      <Footer />
     </>
   );
 };

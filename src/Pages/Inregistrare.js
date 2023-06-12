@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Inregistrare = () => {
@@ -26,8 +26,12 @@ const Inregistrare = () => {
 
         const data = await response.json();
         if (data.loggedIn) {
-          localStorage.setItem("utilizator", JSON.stringify(data.utilizator));
+          localStorage.setItem("utilizator", JSON.stringify(data.user));
           localStorage.setItem("username", username);
+          localStorage.setItem("nume", data.user.nume);
+          localStorage.setItem("prenume", data.user.prenume);
+          localStorage.setItem("email", data.user.email);
+          localStorage.setItem("rol", data.user.rol);
           navigate("/");
           alert(`Te-ai logat cu username-ul de ${username}`);
           window.location.reload();
@@ -50,17 +54,14 @@ const Inregistrare = () => {
 
   return (
     <>
-      <Header />
       <form onSubmit={onSubmitForm}>
         <div
           style={{
-            padding: "10px",
+            padding: "15px",
           }}
         >
           <h2>Inregistrare</h2>
-          <label>Username</label>
-          <br />
-          <input
+          {/* <input
             style={myStyle}
             type="text"
             required
@@ -68,11 +69,18 @@ const Inregistrare = () => {
             name="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-          ></input>
+          ></input> */}
+          <TextField
+            type="text"
+            id="username"
+            label="Username"
+            margin="normal"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
           <br />
-          <label>Nume</label>
-          <br />
-          <input
+          {/* <input
             style={myStyle}
             type="text"
             required
@@ -81,11 +89,19 @@ const Inregistrare = () => {
             name="nume"
             value={nume}
             onChange={(e) => setNume(e.target.value)}
-          ></input>
+          ></input> */}
+          <TextField
+            type="text"
+            id="nume"
+            label="Nume"
+            margin="normal"
+            pattern="[A-Z][a-z]+([-\.][A-Z][a-z]+)?"
+            value={nume}
+            onChange={(e) => setNume(e.target.value)}
+            required
+          />
           <br />
-          <label>Prenume</label>
-          <br />
-          <input
+          {/* <input
             style={myStyle}
             type="text"
             required
@@ -94,11 +110,19 @@ const Inregistrare = () => {
             name="prenume"
             value={prenume}
             onChange={(e) => setPrenume(e.target.value)}
-          ></input>
+          ></input> */}
+          <TextField
+            type="text"
+            id="prenume"
+            label="Prenume"
+            margin="normal"
+            pattern="[A-Z][a-z]+([-\.][A-Z][a-z]+)?"
+            value={prenume}
+            onChange={(e) => setPrenume(e.target.value)}
+            required
+          />
           <br />
-          <label>Email</label>
-          <br />
-          <input
+          {/* <input
             style={myStyle}
             type="text"
             required
@@ -108,11 +132,19 @@ const Inregistrare = () => {
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-          ></input>
+          ></input> */}
+          <TextField
+            type="text"
+            id="email"
+            label="Email"
+            margin="normal"
+            pattern="[A-Z][a-z]+([-\.][A-Z][a-z]+)?"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
           <br />
-          <label>Parola</label>
-          <br />
-          <input
+          {/* <input
             style={myStyle}
             type="password"
             required
@@ -120,25 +152,44 @@ const Inregistrare = () => {
             name="parola"
             value={parola}
             onChange={(e) => setParola(e.target.value)}
-          ></input>{" "}
+          ></input>{" "} */}
+          <TextField
+            type="password"
+            id="parola"
+            label="Parola"
+            margin="normal"
+            pattern="[A-Z][a-z]+([-\.][A-Z][a-z]+)?"
+            value={parola}
+            onChange={(e) => setParola(e.target.value)}
+            required
+          />
           <br />
-          <label>Reintroduceti parola</label>
-          <br />
-          <input
+          {/* <input
             style={myStyle}
             type="password"
             required
             name="rparola"
             value={rparola}
             onChange={(e) => setRparola(e.target.value)}
-          ></input>
+          ></input> */}
+          <TextField
+            type="password"
+            id="rparola"
+            label="Reintroduceti parola"
+            margin="normal"
+            pattern="[A-Z][a-z]+([-\.][A-Z][a-z]+)?"
+            value={rparola}
+            onChange={(e) => setRparola(e.target.value)}
+            required
+          />
           <br />
           <p>
             Parola trebuie sa respecte formatul "Aa123." (Minim o litera mare, o
             litera mica, 3 cifre si caracterul punct)
           </p>
           <Button
-            style={{ backgroundColor: "lightblue", color: "black" }}
+            variant="contained"
+            style={{ backgroundColor: "crimson" }}
             type="submit"
           >
             Inregistrare
@@ -148,7 +199,6 @@ const Inregistrare = () => {
           </p>
         </div>
       </form>
-      <Footer />
     </>
   );
 };
