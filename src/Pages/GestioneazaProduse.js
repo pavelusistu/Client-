@@ -36,6 +36,7 @@ const GestioneazaProduse = () => {
     "placa_baza",
     "cooler",
     "memorie",
+    "sursa",
   ];
 
   const handleOpen = () => {
@@ -150,10 +151,12 @@ const GestioneazaProduse = () => {
               <TableRow>
                 <TableCell>Nume</TableCell>
                 <TableCell>Pret</TableCell>
+                <TableCell>Pret vechi</TableCell>
                 <TableCell>Categorie</TableCell>
                 <TableCell>Marca</TableCell>
                 <TableCell>Compatibilitate</TableCell>
                 <TableCell>Descriere</TableCell>
+                <TableCell>Stoc</TableCell>
                 <TableCell>Actiuni</TableCell>
               </TableRow>
             </TableHead>
@@ -181,6 +184,20 @@ const GestioneazaProduse = () => {
                       />
                     ) : (
                       `${product.pret} lei`
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editedProduct && editedProduct.id === product.id ? (
+                      <TextField
+                        type="number"
+                        name="pret_vechi"
+                        value={editedProduct.pret_vechi}
+                        onChange={(event) => handleInputChange(event, product)}
+                      />
+                    ) : product.pret_vechi ? (
+                      `${product.pret_vechi} lei`
+                    ) : (
+                      `${product.pret}`
                     )}
                   </TableCell>
 
@@ -254,6 +271,19 @@ const GestioneazaProduse = () => {
                   </TableCell>
                   <TableCell>
                     {editedProduct && editedProduct.id === product.id ? (
+                      <TextField
+                        type="number"
+                        name="stoc"
+                        InputProps={{ inputProps: { min: 0 } }}
+                        value={editedProduct.stoc}
+                        onChange={(event) => handleInputChange(event, product)}
+                      />
+                    ) : (
+                      product.stoc
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editedProduct && editedProduct.id === product.id ? (
                       <>
                         <Button
                           style={{
@@ -263,14 +293,14 @@ const GestioneazaProduse = () => {
                           variant="contained"
                           onClick={handleSave}
                         >
-                          Save
+                          Salvare
                         </Button>
                         <Button
                           style={{ color: "crimson", borderColor: "crimson" }}
                           variant="outlined"
                           onClick={handleCancelEdit}
                         >
-                          Cancel
+                          Anulare
                         </Button>
                       </>
                     ) : (

@@ -75,42 +75,55 @@ const Favorite = () => {
 
   return (
     <>
+      <h1 style={{ padding: "15px" }}>Favorite</h1>
       <div className="App">
-        <h3>Favorite Products</h3>
-        {wishlistItems.length === 0 ? (
-          <p>No items in the wishlist.</p>
+        {localStorage.getItem("utilizator") ? (
+          wishlistItems.length === 0 ? (
+            <p>No items in the wishlist.</p>
+          ) : (
+            <ul style={{ listStyleType: "none" }}>
+              {wishlistItems.map((item) => (
+                <li key={item.id}>
+                  <div>
+                    <a
+                      style={{ textDecoration: "none" }}
+                      href={`/Produs/${item.id}`}
+                    >
+                      {item.nume}
+                    </a>
+                    <br />
+                    <img src={`resurse/imagini/${item.imagine}`} />
+                    <p>{item.pret} RON</p>
+                    <span>
+                      <Button
+                        style={{ color: "crimson", borderColor: "crimson" }}
+                        variant="outlined"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => removeFromWishlist(item.id)}
+                      >
+                        STERGE
+                      </Button>
+                      <Button
+                        style={{
+                          backgroundColor: "crimson",
+                          color: "whitesmoke",
+                        }}
+                        onClick={() => addToCart(item.id)}
+                      >
+                        <ShoppingCartOutlinedIcon />
+                        Adauga in cos{" "}
+                      </Button>
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )
         ) : (
-          <ul style={{ listStyleType: "none" }}>
-            {wishlistItems.map((item) => (
-              <li key={item.id}>
-                <div>
-                  <h4>{item.nume}</h4>
-                  <img src={`resurse/imagini/${item.imagine}`} />
-                  <p>{item.pret} RON</p>
-                  <span>
-                    <Button
-                      style={{ color: "crimson", borderColor: "crimson" }}
-                      variant="outlined"
-                      startIcon={<DeleteIcon />}
-                      onClick={() => removeFromWishlist(item.id)}
-                    >
-                      STERGE
-                    </Button>
-                    <Button
-                      style={{
-                        backgroundColor: "crimson",
-                        color: "whitesmoke",
-                      }}
-                      onClick={() => addToCart(item.id)}
-                    >
-                      <ShoppingCartOutlinedIcon />
-                      Adauga in cos{" "}
-                    </Button>
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <p style={{ padding: "15px", textAlign: "center" }}>
+            Trebuie sa va logati pentru a putea adauga produse in pagina de
+            favorite!
+          </p>
         )}
       </div>
     </>

@@ -22,6 +22,7 @@ const AdaugaProduse = ({ handleClose }) => {
   const [productImage, setProductImage] = useState(null);
   const [productCompatibility, setProductCompatibility] = useState("");
   const [productDescription, setProductDescription] = useState("");
+  const [productStock, setProductStock] = useState("");
   const fileInputRef = useRef(null);
 
   const compatibilitati = ["A_50", "B_50", "C_50"];
@@ -34,6 +35,7 @@ const AdaugaProduse = ({ handleClose }) => {
     "placa_baza",
     "cooler",
     "memorie",
+    "sursa",
   ];
 
   const handleAddProduct = async (e) => {
@@ -47,6 +49,7 @@ const AdaugaProduse = ({ handleClose }) => {
       imagine: productImage,
       compatibilitate: productCompatibility,
       descriere: productDescription,
+      stoc: productStock,
     };
 
     try {
@@ -160,6 +163,17 @@ const AdaugaProduse = ({ handleClose }) => {
               onChange={(e) => setProductDescription(e.target.value)}
               required
             />
+            <TextField
+              type="number"
+              InputProps={{ inputProps: { min: 0 } }}
+              id="productStock"
+              margin="normal"
+              label="Stoc"
+              fullWidth
+              value={productStock}
+              onChange={(e) => setProductStock(e.target.value)}
+              required
+            />
             <br />
 
             <FormControl margin="normal" required fullWidth>
@@ -209,7 +223,7 @@ const AdaugaProduse = ({ handleClose }) => {
             style={{ backgroundColor: "crimson", marginTop: "5px" }}
             onClick={handleAddProduct}
           >
-            Add Product
+            Adauga produs
           </Button>
           <Button
             variant="outlined"
@@ -220,7 +234,7 @@ const AdaugaProduse = ({ handleClose }) => {
             }}
             onClick={handleClose}
           >
-            Cancel
+            Anulare
           </Button>
         </DialogActions>
 

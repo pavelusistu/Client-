@@ -14,8 +14,8 @@ const Inregistrare = () => {
   const navigate = useNavigate();
 
   const onSubmitForm = async (e) => {
-    e.preventDefault();
     try {
+      e.preventDefault();
       const body = { username, nume, prenume, email, parola };
       if (parola === rparola) {
         const response = await fetch("http://localhost:5000/Inregistrare", {
@@ -28,10 +28,9 @@ const Inregistrare = () => {
         if (data.loggedIn) {
           localStorage.setItem("utilizator", JSON.stringify(data.user));
           localStorage.setItem("username", username);
-          localStorage.setItem("nume", data.user.nume);
-          localStorage.setItem("prenume", data.user.prenume);
-          localStorage.setItem("email", data.user.email);
-          localStorage.setItem("rol", data.user.rol);
+          localStorage.setItem("nume", nume);
+          localStorage.setItem("prenume", prenume);
+          localStorage.setItem("email", email);
           navigate("/");
           alert(`Te-ai logat cu username-ul de ${username}`);
           window.location.reload();
@@ -68,6 +67,7 @@ const Inregistrare = () => {
             placeholder={"Pavel" + Math.floor(Math.random() * 10000)}
             name="username"
             value={username}
+            pattern="[A-Za-z0-9]+"
             onChange={(e) => setUsername(e.target.value)}
           ></input> */}
           <TextField
@@ -76,6 +76,7 @@ const Inregistrare = () => {
             label="Username"
             margin="normal"
             value={username}
+            inputProps={{ pattern: "[A-Za-z][A-Za-z0-9]*" }}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
@@ -95,7 +96,7 @@ const Inregistrare = () => {
             id="nume"
             label="Nume"
             margin="normal"
-            pattern="[A-Z][a-z]+([-\.][A-Z][a-z]+)?"
+            inputProps={{ pattern: "[A-Z][a-zA-Z]*" }}
             value={nume}
             onChange={(e) => setNume(e.target.value)}
             required
@@ -116,7 +117,7 @@ const Inregistrare = () => {
             id="prenume"
             label="Prenume"
             margin="normal"
-            pattern="[A-Z][a-z]+([-\.][A-Z][a-z]+)?"
+            inputProps={{ pattern: "[A-Z][a-zA-Z]*" }}
             value={prenume}
             onChange={(e) => setPrenume(e.target.value)}
             required
@@ -138,7 +139,9 @@ const Inregistrare = () => {
             id="email"
             label="Email"
             margin="normal"
-            pattern="[A-Z][a-z]+([-\.][A-Z][a-z]+)?"
+            // inputProps={{
+            //   pattern: "/^[^s@]+@[^s@]+.[^s@]+$/",
+            // }}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -158,7 +161,7 @@ const Inregistrare = () => {
             id="parola"
             label="Parola"
             margin="normal"
-            pattern="[A-Z][a-z]+([-\.][A-Z][a-z]+)?"
+            inputProps={{ pattern: "[A-Z]+[a-z]+[0-9]{3,}[.]" }}
             value={parola}
             onChange={(e) => setParola(e.target.value)}
             required
@@ -177,7 +180,7 @@ const Inregistrare = () => {
             id="rparola"
             label="Reintroduceti parola"
             margin="normal"
-            pattern="[A-Z][a-z]+([-\.][A-Z][a-z]+)?"
+            inputProps={{ pattern: "[A-Z]+[a-z]+[0-9]{3,}[.]" }}
             value={rparola}
             onChange={(e) => setRparola(e.target.value)}
             required

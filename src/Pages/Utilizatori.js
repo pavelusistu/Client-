@@ -150,7 +150,7 @@ const Utilizatori = () => {
                           variant="contained"
                           onClick={handleSaveEdit}
                         >
-                          Save
+                          Salvare
                         </Button>
                         <Button
                           style={{
@@ -160,7 +160,7 @@ const Utilizatori = () => {
                           variant="outlined"
                           onClick={() => setEditingUser(null)}
                         >
-                          Cancel
+                          Anulare
                         </Button>
                       </>
                     ) : (

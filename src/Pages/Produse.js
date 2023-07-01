@@ -56,29 +56,18 @@ const Produse = () => {
       });
   }
 
-  const getProduse = async (categorie, marca) => {
+  const getProduse = async (categorie) => {
     try {
       let url = "http://localhost:5000/produse";
 
       if (categorie) {
         url += `?categorie_produs=${categorie}`;
-
-        if (marca) {
-          url += `&marca=${marca}`;
-        }
       }
 
       const response = await fetch(url);
       const jsonData = await response.json();
 
       setBackendData(jsonData.produse);
-
-      if (!categorie) {
-        if (marca) {
-          url += `?marca=${marca}`;
-          setMarcaOptiuni(jsonData.marcaOptiuni);
-        }
-      }
     } catch (error) {
       console.error(error.message);
     }
@@ -172,152 +161,305 @@ const Produse = () => {
 
   return (
     <>
-      <Grid
-        container
-        rowSpacing={2}
-        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-        style={{ padding: "15px" }}
-      >
-        <Grid item xs={3}>
-          <h2>Produse</h2>
-          <h4>Filtre</h4>
-          <Button
-            style={{ color: "crimson", borderColor: "crimson" }}
-            variant="outlined"
-            onClick={sortProductsByPrice}
-          >
-            Pret{" "}
-            {sortingDirection === "asc" ? (
-              <ArrowUpwardIcon />
-            ) : (
-              <ArrowDownwardIcon />
-            )}
-          </Button>
-          <br />
+      <Grid container sx={{ display: { xs: "none", md: "flex" } }}>
+        <Grid
+          container
+          rowSpacing={2}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          style={{ padding: "15px" }}
+        >
+          <Grid item xs={3}>
+            <h1>Produse</h1>
+            <h4>Filtre</h4>
+            <Button
+              style={{ color: "crimson", borderColor: "crimson" }}
+              variant="outlined"
+              onClick={sortProductsByPrice}
+            >
+              Pret{" "}
+              {sortingDirection === "asc" ? (
+                <ArrowUpwardIcon />
+              ) : (
+                <ArrowDownwardIcon />
+              )}
+            </Button>
+            <br />
 
-          <Typography>Marca</Typography>
+            <Typography>Marca</Typography>
 
-          {marca.map((m) => (
-            <FormControlLabel
-              key={m}
-              control={
-                <Checkbox
-                  name={m}
-                  checked={selectedBrands.includes(m)}
-                  onChange={() => handleBrand(m)}
-                />
+            {marca.map((m) => (
+              <FormControlLabel
+                key={m}
+                control={
+                  <Checkbox
+                    name={m}
+                    checked={selectedBrands.includes(m)}
+                    onChange={() => handleBrand(m)}
+                  />
+                }
+                label={m}
+              />
+            ))}
+
+            <Typography>Pret</Typography>
+
+            <Slider
+              value={selectedPriceRange}
+              onChange={(e, newValue) => setSelectedPriceRange(newValue)}
+              defaultValue={0}
+              max={15000}
+              getAriaLabel={(index) =>
+                index === 0 ? "Pret minim" : "Pret maxim"
               }
-              label={m}
+              label="Pret"
+              valueLabelDisplay="auto"
+              style={{ width: "50%", color: "crimson" }}
+              onChangeCommitted={filtrareProduse}
             />
-          ))}
 
-          <Typography>Pret</Typography>
+            <Typography>Tip compatibilitate</Typography>
 
-          <Slider
-            value={selectedPriceRange}
-            onChange={(e, newValue) => setSelectedPriceRange(newValue)}
-            defaultValue={0}
-            max={15000}
-            getAriaLabel={(index) =>
-              index === 0 ? "Pret minim" : "Pret maxim"
-            }
-            label="Pret"
-            valueLabelDisplay="auto"
-            style={{ width: "50%", color: "crimson" }}
-            onChangeCommitted={filtrareProduse}
-          />
+            {tip_compatibilitate.map((tip) => (
+              <FormControlLabel
+                key={tip}
+                control={
+                  <Checkbox
+                    name={tip}
+                    checked={selectedCompatibilities.includes(tip)}
+                    onChange={() => handleCompatibilityChange(tip)}
+                  />
+                }
+                label={tip}
+              />
+            ))}
+            <br />
+            <Button
+              style={{ color: "crimson", borderColor: "crimson" }}
+              variant="outlined"
+              onClick={resetareFiltre}
+            >
+              Reseteaza filtre
+            </Button>
+          </Grid>
+          <Grid item xs={9}>
+            <Grid
+              container
+              rowSpacing={2}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
+              {typeof produseFiltrate === "undefined" ||
+              !Array.isArray(produseFiltrate) ? (
+                <p>se incarca...</p>
+              ) : (
+                produseFiltrate.map((produse) => (
+                  <Grid item xs={3} key={produse.id}>
+                    <div className="grid-produse">
+                      <article className="produs">
+                        <h3>
+                          <Link to={`/Produs/${produse.id}`}>
+                            <span>{produse.nume}</span>
+                          </Link>
+                        </h3>
 
-          <Typography>Tip compatibilitate</Typography>
-
-          {tip_compatibilitate.map((tip) => (
-            <FormControlLabel
-              key={tip}
-              control={
-                <Checkbox
-                  name={tip}
-                  checked={selectedCompatibilities.includes(tip)}
-                  onChange={() => handleCompatibilityChange(tip)}
-                />
-              }
-              label={tip}
-            />
-          ))}
-          <br />
-          <Button
-            style={{ color: "crimson", borderColor: "crimson" }}
-            variant="outlined"
-            onClick={resetareFiltre}
-          >
-            Reseteaza filtre
-          </Button>
+                        <figure>
+                          <a>
+                            <img
+                              src={`resurse/imagini/${produse.imagine}`}
+                              style={{
+                                width: "auto",
+                                height: "200px",
+                                border: "none",
+                              }}
+                              alt={produse.nume}
+                            />
+                          </a>
+                        </figure>
+                        <div
+                          style={{ textAlign: "center", marginBottom: "10px" }}
+                        >
+                          <h4>{produse.pret} lei</h4>
+                          {localStorage.getItem("utilizator") ? (
+                            <Button
+                              style={{
+                                backgroundColor: "crimson",
+                                color: "whitesmoke",
+                              }}
+                              onClick={() => addToCart(produse.id, 1)}
+                            >
+                              <ShoppingCartOutlinedIcon />
+                              Adauga in cos{" "}
+                            </Button>
+                          ) : (
+                            <Button
+                              disabled
+                              style={{
+                                backgroundColor: "#F67280",
+                                color: "white",
+                              }}
+                              onClick={() => addToCart(produse.id, 1)}
+                            >
+                              <ShoppingCartOutlinedIcon />
+                              Adauga in cos{" "}
+                            </Button>
+                          )}
+                        </div>
+                      </article>
+                    </div>
+                  </Grid>
+                ))
+              )}
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item xs={9}>
-          <Grid
-            container
-            rowSpacing={2}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-          >
-            {typeof produseFiltrate === "undefined" ||
-            !Array.isArray(produseFiltrate) ? (
-              <p>se incarca...</p>
-            ) : (
-              produseFiltrate.map((produse) => (
-                <Grid item xs={3} key={produse.id}>
-                  <div className="grid-produse">
-                    <article className="produs">
-                      <h3>
-                        <Link to={`/Produs/${produse.id}`}>
-                          <span>{produse.nume}</span>
-                        </Link>
-                      </h3>
+      </Grid>
+      <Grid container sx={{ display: { xs: "flex", md: "none" } }}>
+        <Grid
+          container
+          rowSpacing={2}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          style={{ padding: "15px" }}
+        >
+          <Grid item xs={12}>
+            <h1>Produse</h1>
+            <h4>Filtre</h4>
+            <Button
+              style={{ color: "crimson", borderColor: "crimson" }}
+              variant="outlined"
+              onClick={sortProductsByPrice}
+            >
+              Pret{" "}
+              {sortingDirection === "asc" ? (
+                <ArrowUpwardIcon />
+              ) : (
+                <ArrowDownwardIcon />
+              )}
+            </Button>
+            <br />
 
-                      <figure>
-                        <a>
-                          <img
-                            src={`resurse/imagini/${produse.imagine}`}
-                            style={{
-                              width: "auto",
-                              height: "200px",
-                              border: "none",
-                            }}
-                            alt={produse.nume}
-                          />
-                        </a>
-                      </figure>
-                      <div
-                        style={{ textAlign: "center", marginBottom: "10px" }}
-                      >
-                        <h4>{produse.pret} lei</h4>
-                        {localStorage.getItem("utilizator") ? (
-                          <Button
-                            style={{
-                              backgroundColor: "crimson",
-                              color: "whitesmoke",
-                            }}
-                            onClick={() => addToCart(produse.id, 1)}
-                          >
-                            <ShoppingCartOutlinedIcon />
-                            Adauga in cos{" "}
-                          </Button>
-                        ) : (
-                          <Button
-                            disabled
-                            style={{
-                              backgroundColor: "#F67280",
-                              color: "white",
-                            }}
-                            onClick={() => addToCart(produse.id, 1)}
-                          >
-                            <ShoppingCartOutlinedIcon />
-                            Adauga in cos{" "}
-                          </Button>
-                        )}
-                      </div>
-                    </article>
-                  </div>
-                </Grid>
-              ))
-            )}
+            <Typography>Marca</Typography>
+
+            {marca.map((m) => (
+              <FormControlLabel
+                key={m}
+                control={
+                  <Checkbox
+                    name={m}
+                    checked={selectedBrands.includes(m)}
+                    onChange={() => handleBrand(m)}
+                  />
+                }
+                label={m}
+              />
+            ))}
+
+            <Typography>Pret</Typography>
+
+            <Slider
+              value={selectedPriceRange}
+              onChange={(e, newValue) => setSelectedPriceRange(newValue)}
+              defaultValue={0}
+              max={15000}
+              getAriaLabel={(index) =>
+                index === 0 ? "Pret minim" : "Pret maxim"
+              }
+              label="Pret"
+              valueLabelDisplay="auto"
+              style={{ width: "50%", color: "crimson" }}
+              onChangeCommitted={filtrareProduse}
+            />
+
+            <Typography>Tip compatibilitate</Typography>
+
+            {tip_compatibilitate.map((tip) => (
+              <FormControlLabel
+                key={tip}
+                control={
+                  <Checkbox
+                    name={tip}
+                    checked={selectedCompatibilities.includes(tip)}
+                    onChange={() => handleCompatibilityChange(tip)}
+                  />
+                }
+                label={tip}
+              />
+            ))}
+            <br />
+            <Button
+              style={{ color: "crimson", borderColor: "crimson" }}
+              variant="outlined"
+              onClick={resetareFiltre}
+            >
+              Reseteaza filtre
+            </Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Grid
+              container
+              rowSpacing={2}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
+              {typeof produseFiltrate === "undefined" ||
+              !Array.isArray(produseFiltrate) ? (
+                <p>se incarca...</p>
+              ) : (
+                produseFiltrate.map((produse) => (
+                  <Grid item xs={12} key={produse.id}>
+                    <div className="grid-produse">
+                      <article className="produs">
+                        <h3>
+                          <Link to={`/Produs/${produse.id}`}>
+                            <span>{produse.nume}</span>
+                          </Link>
+                        </h3>
+
+                        <figure>
+                          <a>
+                            <img
+                              src={`resurse/imagini/${produse.imagine}`}
+                              style={{
+                                width: "auto",
+                                height: "200px",
+                                border: "none",
+                              }}
+                              alt={produse.nume}
+                            />
+                          </a>
+                        </figure>
+                        <div
+                          style={{ textAlign: "center", marginBottom: "10px" }}
+                        >
+                          <h4>{produse.pret} lei</h4>
+                          {localStorage.getItem("utilizator") ? (
+                            <Button
+                              style={{
+                                backgroundColor: "crimson",
+                                color: "whitesmoke",
+                              }}
+                              onClick={() => addToCart(produse.id, 1)}
+                            >
+                              <ShoppingCartOutlinedIcon />
+                              Adauga in cos{" "}
+                            </Button>
+                          ) : (
+                            <Button
+                              disabled
+                              style={{
+                                backgroundColor: "#F67280",
+                                color: "white",
+                              }}
+                              onClick={() => addToCart(produse.id, 1)}
+                            >
+                              <ShoppingCartOutlinedIcon />
+                              Adauga in cos{" "}
+                            </Button>
+                          )}
+                        </div>
+                      </article>
+                    </div>
+                  </Grid>
+                ))
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

@@ -45,11 +45,11 @@ const Footer = () => {
               <h4>Contact</h4>
               <address>
                 <a className="linkuri" href="mailto:lpaelectronics@gmail.com">
-                  Trimiteti Email la LPA Electronics
+                  Trimiteti Email la LPA HIVE
                 </a>
                 <br />
                 <a className="linkuri" href="tel:0726915526">
-                  Sunati LPA Electronics
+                  Sunati LPA HIVE
                 </a>
               </address>
             </ul>

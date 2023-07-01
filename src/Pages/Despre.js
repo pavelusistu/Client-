@@ -6,9 +6,9 @@ const Despre = () => {
   return (
     <>
       <h1>
-        LPA Electronics este o firma specializata in componente hardware.
-        Experienta din domeniu de peste 20 de ani atesta profesionalismul cu
-        care ne tratam clientii.
+        LPA Hive este o firma specializata in componente hardware. Experienta
+        din domeniu de peste 20 de ani atesta profesionalismul cu care ne tratam
+        clientii.
       </h1>
     </>
   );

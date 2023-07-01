@@ -4,13 +4,13 @@ import { Carousel } from "react-bootstrap";
 
 const Carusel = () => {
   return (
-    <Carousel>
+    <Carousel style={{ width: "1500px", margin: "auto" }}>
       <Carousel.Item>
         <img
           style={{
             backgroundSize: "cover",
             backgroundPosition: "center",
-            height: "800px",
+            height: "500px",
           }}
           className="d-block w-100"
           src="./resurse/imagini/carcasaAsus.jpeg"
@@ -27,7 +27,7 @@ const Carusel = () => {
           style={{
             backgroundSize: "cover",
             backgroundPosition: "center",
-            height: "800px",
+            height: "500px",
           }}
           className="d-block w-100"
           src="./resurse/imagini/placaBazaAsus.jpeg"
@@ -44,7 +44,7 @@ const Carusel = () => {
           style={{
             backgroundSize: "cover",
             backgroundPosition: "center",
-            height: "800px",
+            height: "500px",
           }}
           className="d-block w-100"
           src="./resurse/imagini/placaVideo.jpeg"

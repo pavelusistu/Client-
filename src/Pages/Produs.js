@@ -86,13 +86,25 @@ const Produs = () => {
         <div>
           <h3 className="">{produs.nume}</h3>
 
-          {wishlistItems.some((item) => item.id === produs.id) ? (
-            <Button variant="outlined" color="primary" disabled>
-              <FavoriteIcon />
-              Adaugat in favorite
-            </Button>
+          {localStorage.getItem("utilizator") ? (
+            wishlistItems.some((item) => item.id === produs.id) ? (
+              <Button variant="outlined" color="primary" disabled>
+                <FavoriteIcon />
+                Adaugat in favorite
+              </Button>
+            ) : (
+              <Button
+                onClick={() => adaugaFavorite(produs.id)}
+                variant="outlined"
+                color="primary"
+                startIcon={<FavoriteBorderIcon />}
+              >
+                Adauga in favorite
+              </Button>
+            )
           ) : (
             <Button
+              disabled
               onClick={() => adaugaFavorite(produs.id)}
               variant="outlined"
               color="primary"
@@ -101,6 +113,8 @@ const Produs = () => {
               Adauga in favorite
             </Button>
           )}
+
+          {}
         </div>
 
         <img

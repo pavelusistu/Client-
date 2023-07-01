@@ -27,7 +27,8 @@ const Cart = () => {
           data.cart.some(
             (item) =>
               item.compatibilitate === produs.compatibilitate &&
-              item.id !== produs.id
+              item.id !== produs.id &&
+              item.categorie_produs !== produs.categorie_produs
           )
         );
         setRecomandate(recomandari);
@@ -78,12 +79,12 @@ const Cart = () => {
 
       if (response.ok) {
         fetchCartItems();
-        // Perform any additional actions after placing the order
+        alert(`Ai plasat comanda!`);
       } else {
-        console.error("Error placing order:", response.status);
+        console.error("Eroare la plasarea comenzii!", response.status);
       }
     } catch (error) {
-      console.error("Error placing order:", error);
+      console.error("Eroare la plasarea comenzii!", error);
     }
   };
 
@@ -124,7 +125,26 @@ const Cart = () => {
   };
 
   const handleIncrease = (itemId, cantitate) => {
-    updateCartItemQuantity(itemId, cantitate + 1);
+    produse.map((produs) => {
+      if (produs.id === itemId) {
+        if (produs.stoc > cantitate) {
+          updateCartItemQuantity(itemId, cantitate + 1);
+        } else {
+          alert(`Avem doar ${produs.stoc} bucati disponibile!`);
+        }
+      }
+    });
+  };
+
+  const suntCompatibile = () => {
+    if (cartItems.length === 0) {
+      return;
+    }
+
+    const primaCompatibilitate = cartItems[0].compatibilitate;
+    return cartItems.every(
+      (item) => item.compatibilitate === primaCompatibilitate
+    );
   };
 
   return (
@@ -182,46 +202,64 @@ const Cart = () => {
                     variant="outlined"
                     onClick={() => removeFromCart(item.id)}
                   >
-                    Remove
+                    Sterge
                   </Button>
                 </div>
               ))}
             </Grid>
 
-            <Grid item xs={2}>
+            <Grid
+              item
+              xs={2}
+              style={{ display: cartItems.length > 0 ? "block" : "none" }}
+            >
               <p>Suma totala: {sumaPreturilor(cartItems)} lei</p>
               <p>Numarul produselor: {cartItems.length}</p>
+              <p
+                style={{
+                  color: suntCompatibile() ? "lightgreen" : "red",
+                }}
+              >
+                Produsele din cos{" "}
+                {suntCompatibile()
+                  ? "sunt compatibile!"
+                  : "nu sunt compatibile!"}
+              </p>
             </Grid>
 
             <Grid item xs={7}>
               {cartItems.length === 0 ? (
-                <p>Va rugam introduceti produsele dorite in cos.</p>
+                <p style={{ textAlign: "center" }}>
+                  Va rugam introduceti produsele dorite in cos.
+                </p>
               ) : (
-                <Button
-                  style={{
-                    marginTop: "1rem",
-                    width: "30%",
-                    backgroundColor: "crimson",
-                  }}
-                  variant="contained"
-                  onClick={plaseazaComanda}
-                >
-                  Plaseaza comanda
-                </Button>
+                <>
+                  <Button
+                    style={{
+                      marginTop: "1rem",
+                      width: "30%",
+                      backgroundColor: "crimson",
+                    }}
+                    variant="contained"
+                    onClick={plaseazaComanda}
+                  >
+                    Plaseaza comanda
+                  </Button>
+                  <br />
+                  <Button
+                    style={{
+                      marginTop: "1rem",
+                      width: "30%",
+                      color: "crimson",
+                      borderColor: "crimson",
+                    }}
+                    variant="outlined"
+                    href="/Produse"
+                  >
+                    Continuati cumparaturile
+                  </Button>
+                </>
               )}
-              <br />
-              <Button
-                style={{
-                  marginTop: "1rem",
-                  width: "30%",
-                  color: "crimson",
-                  borderColor: "crimson",
-                }}
-                variant="outlined"
-                href="/Produse"
-              >
-                Continuati cumparaturile
-              </Button>
             </Grid>
           </Grid>
         ) : (
@@ -229,11 +267,13 @@ const Cart = () => {
             Trebuie sa va logati pentru a putea adauga produse in cos!
           </p>
         )}
-        <h2 style={{ textAlign: "center" }}>
-          Produse compatibile cu alegerile dumneavoastra
-        </h2>
-        <hr />
-        <CarouselList items={recomandate} />
+        <div style={{ display: cartItems.length === 0 ? "none" : "block" }}>
+          <h2 style={{ textAlign: "center" }}>
+            Produse compatibile cu alegerile dumneavoastra
+          </h2>
+          <hr />
+          <CarouselList items={recomandate} />
+        </div>
       </div>
     </>
   );
